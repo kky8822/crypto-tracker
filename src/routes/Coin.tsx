@@ -9,7 +9,6 @@ import {
 import styled from "styled-components";
 import Price from "./Price";
 import Chart from "./Chart";
-import Coins from "./Coins";
 import { useQuery } from "react-query";
 import { Helmet } from "react-helmet";
 import { fetchCoinInfo, fetchCoinPrice } from "../api";
@@ -47,7 +46,7 @@ const Title = styled.h1`
 const Overview = styled.div`
   display: flex;
   justify-content: space-between;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: ${(props) => props.theme.cardBgColor};
   padding: 10px 20px;
   border-radius: 10px;
 `;
@@ -195,7 +194,7 @@ function Coin() {
             </OverviewItem>
             <OverviewItem>
               <span>Price:</span>
-              <span>$ {priceData?.quotes.USD.price.toFixed(3)}</span>
+              <span>$ {priceData?.quotes?.USD?.price?.toFixed(3)}</span>
             </OverviewItem>
           </Overview>
           <Description>{infoData?.description}</Description>

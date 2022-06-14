@@ -18,10 +18,10 @@ export function fetchCoinPrice(coinId: string) {
 
 export function fetchCoinHistory(coinId: string) {
   const endDate = Math.floor(Date.now() / 1000);
-  const startDate = endDate - 6 * 24 * 60 * 60;
+  const startDate = endDate - 30 * 24 * 60 * 60;
 
   return fetch(
     // `${BASE_URL}/coins/${coinId}/ohlcv/historical?start=${startDate}&end=${endDate}`
-    `${BASE_URL}/coins/${coinId}/ohlcv/historical?start=${startDate}&end=${endDate}`
+    `${BASE_URL}/tickers/${coinId}/historical?start=${startDate}&end=${endDate}&interval=1d`
   ).then((response) => response.json());
 }

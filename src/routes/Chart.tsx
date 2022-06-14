@@ -18,15 +18,24 @@ interface IOHLCV {
   volume: number;
   market_cap: number;
 }
+
+interface IDaily {
+  market_cap: number;
+  price: number;
+  timestamp: string;
+  volume_24h: number;
+}
+
 function Chart({ coinId }: IChart) {
   const isDark = useRecoilValue(isDarkAtom);
-  const { isLoading, data } = useQuery<IOHLCV[]>(
+  const { isLoading, data } = useQuery<IDaily[]>(
     ["ohlcv", coinId],
     () => fetchCoinHistory(coinId)
     // {
     //   refetchInterval: 10000,
     // }
   );
+  console.log(data);
   return (
     <div>
       {isLoading ? (
@@ -37,7 +46,7 @@ function Chart({ coinId }: IChart) {
           series={[
             {
               name: "Price",
-              data: data?.map((price) => price.close) ?? [],
+              data: data?.map((price) => price.price) ?? [],
             },
           ]}
           options={{
@@ -63,7 +72,7 @@ function Chart({ coinId }: IChart) {
               axisTicks: { show: false },
               axisBorder: { show: false },
               type: "datetime",
-              categories: data?.map((price) => price.time_close) ?? [],
+              categories: data?.map((price) => price.timestamp) ?? [],
             },
             fill: {
               type: "gradient",

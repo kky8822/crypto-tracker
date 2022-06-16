@@ -16,12 +16,23 @@ export function fetchCoinPrice(coinId: string) {
   );
 }
 
-export function fetchCoinHistory(coinId: string) {
+export function fetchCoinMonthHistory(coinId: string) {
   const endDate = Math.floor(Date.now() / 1000);
   const startDate = endDate - 30 * 24 * 60 * 60;
+  const interval = "1d";
+  return fetch(
+    // `${BASE_URL}/coins/${coinId}/ohlcv/historical?start=${startDate}&end=${endDate}`
+    `${BASE_URL}/tickers/${coinId}/historical?start=${startDate}&end=${endDate}&interval=${interval}`
+  ).then((response) => response.json());
+}
+
+export function fetchCoinYearHistory(coinId: string) {
+  const endDate = Math.floor(Date.now() / 1000);
+  const startDate = endDate - 364 * 24 * 60 * 60;
+  const interval = "7d";
 
   return fetch(
     // `${BASE_URL}/coins/${coinId}/ohlcv/historical?start=${startDate}&end=${endDate}`
-    `${BASE_URL}/tickers/${coinId}/historical?start=${startDate}&end=${endDate}&interval=1d`
+    `${BASE_URL}/tickers/${coinId}/historical?start=${startDate}&end=${endDate}&interval=${interval}`
   ).then((response) => response.json());
 }

@@ -1,8 +1,9 @@
 import { useQuery } from "react-query";
-import { fetchCoinHistory } from "../api";
+import { fetchCoinMonthHistory, fetchCoinYearHistory } from "../api";
 import ApexChart from "react-apexcharts";
 import { isDarkAtom } from "../atoms";
 import { useRecoilValue } from "recoil";
+import styled from "styled-components";
 
 interface IChart {
   coinId: string;
@@ -26,16 +27,13 @@ interface IDaily {
   volume_24h: number;
 }
 
-function Chart({ coinId }: IChart) {
-  const isDark = useRecoilValue(isDarkAtom);
-  const { isLoading, data } = useQuery<IDaily[]>(
-    ["ohlcv", coinId],
-    () => fetchCoinHistory(coinId)
-    // {
-    //   refetchInterval: 10000,
-    // }
-  );
-  console.log(data);
+interface IChartBox {
+  isDark: boolean;
+  isLoading: boolean;
+  data: IDaily[] | undefined;
+}
+
+function ChartBox({ isDark, isLoading, data }: IChartBox) {
   return (
     <div>
       {isLoading ? (
@@ -91,6 +89,37 @@ function Chart({ coinId }: IChart) {
         />
       )}
     </div>
+  );
+}
+
+function ChartMonth({ coinId }: IChart) {
+  const isDark = useRecoilValue(isDarkAtom);
+  const { isLoading, data } = useQuery<IDaily[]>(["ohlcv_month", coinId], () =>
+    fetchCoinMonthHistory(coinId)
+  );
+
+  console.log("month", data);
+
+  return ChartBox({ isDark, isLoading, data });
+}
+
+function ChartYear({ coinId }: IChart) {
+  const isDark = useRecoilValue(isDarkAtom);
+  const { isLoading, data } = useQuery<IDaily[]>(["ohlcv_year", coinId], () =>
+    fetchCoinYearHistory(coinId)
+  );
+
+  console.log("year", data);
+
+  return ChartBox({ isDark, isLoading, data });
+}
+
+function Chart({ coinId }: IChart) {
+  return (
+    <>
+      <ChartMonth coinId={coinId} />
+      <ChartYear coinId={coinId} />
+    </>
   );
 }
 
